@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 class Conversation {
 
@@ -7,65 +8,80 @@ class Conversation {
     // You will start the conversation here.
     System.out.println("How many rounds?");
     int rounds = sc.nextInt();
-    System.out.println("Hi there!  What's on your mind?"); //greeting of bot
-    for (int i = 0; i < rounds; i++) { // loops for every user response (rounds)
-
+    // greeting of bot
+    String greeting = "Hi there!  What's on your mind?";
+    sc.nextLine();
+    // add greeting to transcript
+    System.out.println(greeting);
+    String[] transcipt = new String[rounds+1]; // 
+    // loops for every user response (rounds)
+    for (int i = 0; i < rounds; i++) {
       String userInput = sc.nextLine(); // user's response
-      userInput = userInput.toLowerCase();
-      if (userInput.contains("you") || userInput.contains("i") || userInput.contains("me") ||
-      userInput.contains("am")|| userInput.contains("my") || userInput.contains("your")) { //checks if there are any of the keywords in the user's response.
-        // changes words: 
-        String[] splitInput = userInput.split("\\s+"); // splits the response into an string array
-      
-        StringBuilder response = new StringBuilder(""); // intial bot response
-        for (int a = 0; a < (splitInput.length) ; a++) { // will go through each word in the phrase.
-          if (splitInput[a].equals("i")) { //replaces I with you
-          splitInput[a] = "you";
-          response.append(splitInput[a]);
-          }
-          else if (splitInput[a].equals("me")) { //replaces me with you
-            splitInput[i] = "you";
-            response.append(splitInput[a]); //adds word into bot response
-          }
-          else if (splitInput[a].equals("am")) { // replaces am with are
-            splitInput[a] = "are";
-            response.append(splitInput[a]);
-          }
-          else if (splitInput[a].equals("you")) { // replaces you with I
-            splitInput[a] = "I";
-            response.append(splitInput[a]);
-          }
-          else if (splitInput[a].equals("my")) { //replaces my with your
-            splitInput[a] = "your";
-            response.append(splitInput[a]);
-          }
-          else if (splitInput[a].equals("your")) { //replaces your with my
-            splitInput[a] = "my";
-            response.append(splitInput[a]);
-          }
-          else {
-            response.append(splitInput[a]);
-          }  
-        }
-        
-        String sent = response.toString().substring(0,1).toUpperCase() + response.toString().substring(1);
-        
-        if (sent.contains(".")){
-          String newSent = sent.replace(".","?");
-          System.out.println(newSent);
-        }
-        else {
-          System.out.println(sent);
-        }
+      transcipt[i] = userInput;
+      userInput = userInput.toLowerCase(); // lowercases the whole response
 
-          
+      // checks to see if any words need to be mirrored
+      if (userInput.contains("you") || userInput.contains("i") || userInput.contains("me") ||
+          userInput.contains("am") || userInput.contains("my") || userInput.contains("your")
+          || userInput.contains("are")) { // checks if there are any of the keywords in the user's response.
+        // changes words
+        // splits the response into an string array
+        String[] word = userInput.split("\\s+"); // '\\s+' is for whitespace
+
+        StringBuilder response = new StringBuilder(""); // intial bot response
+        for (int a = 0; a < (word.length); a++) { // will go through each word in the phrase.
+          if (word[a].equals("i")) { // replaces I with you
+            word[a] = "you";
+            response.append(word[a] + " ");
+          } else if (word[a].equals("me")) { // replaces me with you
+            word[a] = "you";
+            response.append(word[a] + " "); // adds word into bot response
+          } else if (word[a].equals("am")) { // replaces am with are
+            word[a] = "are";
+            response.append(word[a] + " ");
+          } else if (word[a].equals("you")) { // replaces you with I
+            word[a] = "I";
+            response.append(word[a] + " ");
+          } else if (word[a].equals("my")) { // replaces my with your
+            word[a] = "your";
+            response.append(word[a] + " ");
+          } else if (word[a].equals("your")) { // replaces your with my
+            word[a] = "my";
+            response.append(word[a] + " ");
+          } else if (word[a].equals("are")) { // replaces are with am
+            word[a] = "am";
+            response.append(word[a] + " ");
+          } else { // adds word that does not need to be changed
+            response.append(word[a] + " ");
+          }
+
+        }
+        // assembles the words into a sentence
+        String sent = response.toString().substring(0, 1).toUpperCase() + response.toString().substring(1);
+        System.out.println(sent.replace(".", "?"));
+        transcipt[i+1] = sent.replace(".", "?");
       }
+      // responds to input with a random phrase
       else {
         // create array of phrases the bot can respond with
+        String[] phrase = { "How interesting...", "Oh?", "Exciting!" };
         // have it respond with a random phrase from the array.
+        Random rand = new Random();
+        int random_index = rand.nextInt(phrase.length);
+        System.out.println(phrase[random_index]);
+        transcipt[i+1] = phrase[random_index];
       }
     }
-
-    sc.close();    
+    // after rounds, chat says goodbye
+    System.out.println("Goodbye!");
+    // prints conversation
+    System.out.println("TRANSCRIPT:");
+    System.out.println(greeting);
+    // prints each phrase used in conversation
+    for (int i = 0; i < transcipt.length; i++) {
+      System.out.println(transcipt[i]);
+    }
+    System.out.println("Goodbye!");
+    sc.close();
   }
 }
