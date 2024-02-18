@@ -13,20 +13,28 @@ class Conversation {
     sc.nextLine();
     // add greeting to transcript
     System.out.println(greeting);
-    String[] transcipt = new String[rounds+1]; // 
+    String[] transcipt = new String[2*rounds]; // each round has a two new strings added to transcript
     // loops for every user response (rounds)
     for (int i = 0; i < rounds; i++) {
       String userInput = sc.nextLine(); // user's response
-      transcipt[i] = userInput;
-      userInput = userInput.toLowerCase(); // lowercases the whole response
+      // adds userinput to transcript array based on the index
+      if (i == 0) {
+        transcipt[i] = userInput; 
+      }
+      else {
+        transcipt[2*i] = userInput;
+      }
+      
+      
+      String userInputLower = userInput.toLowerCase(); // lowercases the whole response
 
       // checks to see if any words need to be mirrored
-      if (userInput.contains("you") || userInput.contains("i") || userInput.contains("me") ||
-          userInput.contains("am") || userInput.contains("my") || userInput.contains("your")
-          || userInput.contains("are")) { // checks if there are any of the keywords in the user's response.
+      if (userInputLower.contains("you") || userInputLower.contains("i") || userInputLower.contains("me") ||
+          userInputLower.contains("am") || userInputLower.contains("my") || userInputLower.contains("your")
+          || userInputLower.contains("are")) { // checks if there are any of the keywords in the user's response.
         // changes words
         // splits the response into an string array
-        String[] word = userInput.split("\\s+"); // '\\s+' is for whitespace
+        String[] word = userInputLower.split("\\s+"); // '\\s+' is for whitespace
 
         StringBuilder response = new StringBuilder(""); // intial bot response
         for (int a = 0; a < (word.length); a++) { // will go through each word in the phrase.
@@ -59,7 +67,14 @@ class Conversation {
         // assembles the words into a sentence
         String sent = response.toString().substring(0, 1).toUpperCase() + response.toString().substring(1);
         System.out.println(sent.replace(".", "?"));
+        
+        // adds the bot's response to the transcript based on the index
+        if (i == 0) {
         transcipt[i+1] = sent.replace(".", "?");
+        }
+        else {
+          transcipt[2*i + 1] = sent.replace(".", "?");
+        }
       }
       // responds to input with a random phrase
       else {
@@ -69,7 +84,13 @@ class Conversation {
         Random rand = new Random();
         int random_index = rand.nextInt(phrase.length);
         System.out.println(phrase[random_index]);
-        transcipt[i+1] = phrase[random_index];
+        // adds bot's response to transcript based on index
+        if (i ==0) {
+          transcipt[i+1] = phrase[random_index];
+        }
+        else {
+          transcipt[2*i + 1] = phrase[random_index];
+        }
       }
     }
     // after rounds, chat says goodbye
